@@ -1,0 +1,1187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Income Studio</title>
+  <meta name="description" content="Discover curated digital income tools and affiliate products designed to help you build smarter online revenue streams." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+:root {
+  --primary: #ff6b35;
+  --accent: #2ec4b6;
+  --bg-tint: #0f172a;
+  --text: #f8fafc;
+  --muted: #cbd5e1;
+  --panel: rgba(15, 23, 42, 0.72);
+  --border: rgba(148, 163, 184, 0.25);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  font-family: 'Manrope', system-ui, sans-serif;
+  color: var(--text);
+  background: radial-gradient(circle at 10% 10%, color-mix(in srgb, var(--primary) 18%, transparent), transparent 35%), radial-gradient(circle at 80% 0%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 30%), var(--bg-tint);
+  min-height: 100vh;
+  scroll-behavior: smooth;
+}
+
+body {
+  position: relative;
+  padding: 2rem 1rem 4rem;
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+/* ADMIN LOCK MODAL */
+#adminLock {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+}
+
+#adminLock.hidden {
+  display: none;
+}
+
+.admin-modal {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 2.5rem;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+}
+
+.admin-modal h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.8rem;
+  margin: 0 0 0.5rem;
+  color: var(--text);
+}
+
+.admin-modal p {
+  color: var(--muted);
+  margin: 0 0 1.5rem;
+  font-size: 0.95rem;
+}
+
+.admin-modal input {
+  width: 100%;
+  padding: 0.85rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--text);
+  font-size: 1rem;
+  transition: border-color 180ms ease;
+}
+
+.admin-modal input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent);
+}
+
+.admin-modal .btn {
+  width: 100%;
+  padding: 0.9rem;
+  margin-bottom: 0.6rem;
+}
+
+.admin-modal .btn-secondary {
+  font-size: 0.85rem;
+}
+
+.admin-status {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  font-size: 0.85rem;
+  display: none;
+}
+
+.admin-status.error {
+  background: color-mix(in srgb, #ff6b35 15%, transparent);
+  color: #ff6b35;
+  border: 1px solid color-mix(in srgb, #ff6b35 30%, transparent);
+  display: block;
+}
+
+.admin-status.success {
+  background: color-mix(in srgb, #2ec4b6 15%, transparent);
+  color: #2ec4b6;
+  border: 1px solid color-mix(in srgb, #2ec4b6 30%, transparent);
+  display: block;
+}
+
+/* ADMIN BADGE */
+.admin-badge {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  background: var(--primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  z-index: 100;
+  cursor: pointer;
+  transition: transform 180ms ease;
+}
+
+.admin-badge:hover {
+  transform: scale(1.05);
+}
+
+.admin-badge.hidden {
+  display: none;
+}
+
+/* OFFER BANNER */
+.offer-banner {
+  position: fixed;
+  right: 1rem;
+  top: 1rem;
+  max-width: 360px;
+  width: min(92vw, 360px);
+  z-index: 30;
+  border: 1px solid var(--border);
+  border-radius: 0.9rem;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.96);
+  box-shadow: 0 20px 45px color-mix(in srgb, var(--primary) 25%, transparent);
+  animation: pop-in 420ms ease;
+  backdrop-filter: blur(12px);
+}
+
+.offer-banner-content {
+  padding-right: 1.5rem;
+}
+
+.offer-banner-content p {
+  margin: 0 0 0.8rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.offer-banner .btn {
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
+  width: 100%;
+  text-align: center;
+}
+
+.offer-banner-close {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0.25rem;
+  transition: color 180ms ease;
+}
+
+.offer-banner-close:hover {
+  color: var(--text);
+}
+
+.offer-banner-open {
+  position: fixed;
+  right: 1rem;
+  top: 1rem;
+  z-index: 29;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  background: rgba(15, 23, 42, 0.92);
+  padding: 0.6rem 1rem;
+  display: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform 180ms ease;
+  backdrop-filter: blur(12px);
+}
+
+.offer-banner-open:hover {
+  transform: scale(1.05);
+}
+
+.offer-banner-open.visible {
+  display: inline-block;
+}
+
+/* BG ORBS */
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(65px);
+  opacity: 0.45;
+  z-index: -1;
+}
+
+.orb-1 {
+  width: 260px;
+  height: 260px;
+  background: var(--primary);
+  top: -30px;
+  left: -60px;
+}
+
+.orb-2 {
+  width: 320px;
+  height: 320px;
+  background: var(--accent);
+  right: -100px;
+  top: 35%;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+h1, h2, h3 {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+h1 {
+  margin: 1.2rem 0 0.75rem;
+  font-size: clamp(2rem, 4vw, 3.35rem);
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: clamp(1.4rem, 3vw, 1.85rem);
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  margin: 0 auto;
+  max-width: 760px;
+  font-weight: 600;
+}
+
+.hero-intro {
+  margin: 1rem auto 0;
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.hero-graffiti {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.graffiti-tag {
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text);
+  background: color-mix(in srgb, var(--primary) 15%, transparent);
+  transform: rotate(var(--tilt, 0deg));
+  animation: tag-bob 2.9s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+.hero-cta {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  margin-top: 1.8rem;
+  flex-wrap: wrap;
+}
+
+/* BUTTONS */
+.btn {
+  border: 0;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 0.85rem 1.3rem;
+  border-radius: 0.7rem;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--primary) 32%, transparent);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--primary) 45%, transparent);
+}
+
+.btn-secondary {
+  border: 1px solid var(--border);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* PANELS */
+.panel {
+  background: var(--panel);
+  backdrop-filter: blur(7px);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.panel.hidden {
+  display: none;
+}
+
+/* METRICS */
+.metrics {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.metric {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  text-align: center;
+  transition: transform 180ms ease;
+}
+
+.metric:hover {
+  transform: translateY(-3px);
+}
+
+.metric strong {
+  display: block;
+  font-size: 1.5rem;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+}
+
+.metric span {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* PRODUCTS */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.2rem;
+}
+
+.product-card {
+  border: 1px solid var(--border);
+  border-radius: 0.9rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+  display: flex;
+  flex-direction: column;
+  transition: transform 200ms ease;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+}
+
+.product-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+}
+
+.product-content {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-chip {
+  display: inline-block;
+  margin: 0 0 0.6rem;
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  border: 1px solid var(--border);
+  width: fit-content;
+}
+
+.product-content h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+
+.product-content p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  flex: 1;
+  margin-bottom: 1rem;
+}
+
+.product-content .btn {
+  width: 100%;
+  text-align: center;
+  padding: 0.75rem;
+}
+
+/* QUOTES */
+.quote-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.quote {
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.quote p {
+  margin: 0 0 0.8rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.quote span {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* FORMS */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.form-row label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+}
+
+input[type="text"],
+input[type="color"],
+textarea {
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  padding: 0.75rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: border-color 180ms ease;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.color-row {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.control-actions {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-top: 1.2rem;
+}
+
+.control-actions .btn {
+  flex: 1;
+  min-width: 140px;
+}
+
+.small-note {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 1rem;
+}
+
+/* LEGAL */
+.legal article {
+  border-top: 1px dashed var(--border);
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+}
+
+.legal article h3 {
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+}
+
+.legal article p {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.legal a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* FOOTER */
+.footer {
+  margin-top: 3rem;
+  text-align: center;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding-top: 2rem;
+}
+
+.footer p {
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+}
+
+.footer nav {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.footer a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: color 180ms ease;
+}
+
+.footer a:hover {
+  color: var(--text);
+}
+
+/* ANIMATIONS */
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes tag-bob {
+  0%, 100% {
+    transform: translateY(0) rotate(var(--tilt, 0deg));
+  }
+  50% {
+    transform: translateY(-6px) rotate(var(--tilt, 0deg));
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 1.5rem 0.8rem 3rem;
+  }
+
+  .hero {
+    padding: 2rem 0.5rem;
+  }
+
+  .panel {
+    padding: 1.2rem;
+  }
+
+  .offer-banner {
+    left: 0.8rem;
+    right: 0.8rem;
+    width: auto;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.9rem;
+  }
+
+  .metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 1.5rem 0.3rem;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  .admin-badge {
+    left: 0.5rem;
+    top: 0.5rem;
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+  </style>
+</head>
+<body>
+  <!-- ADMIN LOCK MODAL -->
+  <div id="adminLock">
+    <div class="admin-modal">
+      <h2>🔐 Admin Access</h2>
+      <p>Enter password to edit content</p>
+      <input id="adminPassword" type="password" placeholder="Admin password" autocomplete="off" />
+      <button class="btn btn-primary" onclick="validateAdminPassword()">Unlock Admin</button>
+      <button class="btn btn-secondary" onclick="skipAdmin()">Continue as Guest</button>
+      <div id="adminStatus" class="admin-status"></div>
+    </div>
+  </div>
+
+  <!-- ADMIN BADGE (shows when logged in) -->
+  <div id="adminBadge" class="admin-badge hidden">
+    🔓 Admin Mode | <a href="javascript:logoutAdmin()" style="color: white; text-decoration: none; cursor: pointer;">Logout</a>
+  </div>
+
+  <!-- OFFER BANNER -->
+  <aside id="offerBanner" class="offer-banner">
+    <div class="offer-banner-content">
+      <p id="offerBannerText">Limited-time bonus bundle: get instant access and start today.</p>
+      <a id="offerBannerCta" class="btn btn-primary" href="#products" target="_blank" rel="noopener noreferrer">Claim Offer</a>
+    </div>
+    <button id="offerBannerClose" class="offer-banner-close" type="button">✕</button>
+  </aside>
+
+  <!-- BACKGROUND ORBS -->
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+
+  <!-- HERO SECTION -->
+  <header class="hero">
+    <div class="badge" id="promoBadge">SPECIAL BUNDLE OFFER ON THIS PAGE ONLY</div>
+    <h1 id="siteTitle">Digital Income Studio</h1>
+    <p class="hero-sub" id="heroSubtitle">Build simple digital assets that attract buyer-intent traffic and generate long-term income momentum.</p>
+    <p class="hero-intro" id="briefIntro">Welcome to Digital Income Studio. This page highlights high-impact affiliate tools and platforms inspired by practical traffic strategies, automation, and conversion-focused execution.</p>
+    <div id="heroGraffiti" class="hero-graffiti"></div>
+    <div class="hero-cta">
+      <a id="primaryCta" class="btn btn-primary" href="#products">Explore Products</a>
+      <a id="secondaryCta" class="btn btn-secondary" href="#intro">How It Works</a>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <section id="intro" class="panel">
+      <h2>Introduction</h2>
+      <p id="introText">Traditional traffic methods can be expensive and inconsistent. The model behind these recommendations emphasizes practical tools, evergreen discoverability, and performance-based growth. Start with one focused asset, optimize it, and scale into a portfolio of digital income opportunities.</p>
+      <div class="metrics" id="metrics"></div>
+    </section>
+
+    <section id="products" class="panel">
+      <h2>Featured Affiliate Products</h2>
+      <p style="color: var(--muted); margin-bottom: 1.5rem;">Six curated tools to accelerate your digital income journey.</p>
+      <div class="product-grid" id="productGrid"></div>
+    </section>
+
+    <section class="panel testimonials">
+      <h2>Why People Love This Approach</h2>
+      <div class="quote-grid" id="quoteGrid"></div>
+    </section>
+
+    <!-- CONTROL PANEL (HIDDEN UNTIL AUTHENTICATED) -->
+    <section class="panel control-panel hidden" id="controlPanel">
+      <h2>Live Page Controls</h2>
+      <p style="color: var(--muted); margin-bottom: 1.5rem;">✅ Admin authenticated. Edit key content, colors, and links in real time. Changes are saved in your browser.</p>
+      <form id="settingsForm" novalidate>
+        <div class="form-row">
+          <label for="inputTitle">Page Title</label>
+          <input id="inputTitle" type="text" placeholder="Enter page title" />
+        </div>
+        <div class="form-row">
+          <label for="inputSubtitle">Subtitle</label>
+          <textarea id="inputSubtitle" placeholder="Enter subtitle"></textarea>
+        </div>
+        <div class="form-row">
+          <label for="inputIntro">Brief Intro</label>
+          <textarea id="inputIntro" placeholder="Enter intro text"></textarea>
+        </div>
+        <div class="color-row">
+          <div class="form-row">
+            <label for="inputPrimary">Primary Color</label>
+            <input id="inputPrimary" type="color" />
+          </div>
+          <div class="form-row">
+            <label for="inputAccent">Accent Color</label>
+            <input id="inputAccent" type="color" />
+          </div>
+          <div class="form-row">
+            <label for="inputBg">Background Tone</label>
+            <input id="inputBg" type="color" />
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="inputBannerText">Offer Banner Text</label>
+          <input id="inputBannerText" type="text" placeholder="Banner text" />
+        </div>
+        <div class="form-row">
+          <label for="inputBannerCtaText">Offer Banner Button Text</label>
+          <input id="inputBannerCtaText" type="text" placeholder="Button text" />
+        </div>
+        <div class="form-row">
+          <label for="inputBannerCtaLink">Offer Banner Link</label>
+          <input id="inputBannerCtaLink" type="text" placeholder="https://example.com or #products" />
+        </div>
+        <div class="form-row">
+          <label for="inputGraffiti">Hero Graffiti Words (comma separated)</label>
+          <input id="inputGraffiti" type="text" placeholder="Traffic, Affiliate, Automation" />
+        </div>
+        <div class="form-row">
+          <label for="inputProductsJson">Products JSON</label>
+          <textarea id="inputProductsJson" placeholder='[{"name":"Product Name","tag":"Tag","desc":"Description","image":"URL","link":"URL"}]'></textarea>
+        </div>
+        <div class="form-row">
+          <label for="inputMetricsJson">Metrics JSON</label>
+          <textarea id="inputMetricsJson" placeholder='[{"label":"Metric Name","value":"123K"}]'></textarea>
+        </div>
+        <div class="form-row">
+          <label for="inputQuotesJson">Testimonials JSON</label>
+          <textarea id="inputQuotesJson" placeholder='[{"text":"Quote text","by":"Author Name"}]'></textarea>
+        </div>
+        <div class="control-actions">
+          <button type="submit" class="btn btn-primary">✓ Apply Changes</button>
+          <button type="button" class="btn btn-secondary" id="resetBtn">↺ Reset Defaults</button>
+        </div>
+      </form>
+      <p class="small-note">💡 Use JSON editors for products, metrics, and testimonials. Keep valid JSON format to apply changes.</p>
+    </section>
+
+    <!-- LEGAL SECTION -->
+    <section id="legal" class="panel legal">
+      <h2>Legal & Policy</h2>
+      <article id="terms">
+        <h3>Terms & Conditions</h3>
+        <p>By using this page, you agree to use the information for lawful purposes only. Product availability, pricing, and partner terms may change without notice.</p>
+      </article>
+      <article id="privacy">
+        <h3>Privacy Policy</h3>
+        <p>We may collect basic analytics and click activity to improve user experience. Personal data is not sold. Contact us for data access or deletion requests.</p>
+      </article>
+      <article id="earnings">
+        <h3>Earnings Disclaimer</h3>
+        <p>Income examples are illustrative and not guarantees. Your results depend on effort, experience, market conditions, and execution quality.</p>
+      </article>
+      <article id="gdpr">
+        <h3>GDPR Notice</h3>
+        <p>If you are in the EEA/UK, you have rights to access, rectify, erase, and restrict processing of your personal data. Contact support to exercise these rights.</p>
+      </article>
+      <article id="disclaimer">
+        <h3>General Disclaimer</h3>
+        <p>This site may include affiliate links. We may receive compensation if you purchase through these links, at no additional cost to you.</p>
+      </article>
+      <article id="ftc">
+        <h3>FTC Disclosure</h3>
+        <p>Some recommendations are promoted as part of paid affiliate partnerships. These relationships do not alter our editorial approach to product selection.</p>
+      </article>
+      <article id="contact">
+        <h3>Contact</h3>
+        <p>Email: <a href="mailto:support@digitalincomestudio.example">support@digitalincomestudio.example</a></p>
+      </article>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© <span id="year"></span> Digital Income Studio. All rights reserved.</p>
+    <nav>
+      <a href="#terms">Terms & Conditions</a>
+      <a href="#privacy">Privacy Policy</a>
+      <a href="#earnings">Earnings Disclaimer</a>
+      <a href="#gdpr">GDPR</a>
+      <a href="#disclaimer">Disclaimer</a>
+      <a href="#ftc">FTC Disclosure</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </footer>
+
+  <script>
+    /* ═══════════════════════════════════════════════════════════════
+       ⚠️ ADMIN PASSWORD - CHANGE THIS IMMEDIATELY ⚠️
+       ═══════════════════════════════════════════════════════════════ */
+    const ADMIN_PASSWORD = 'Shona@236'; // CHANGE THIS TO A SECURE PASSWORD!
+    const ADMIN_KEY = 'dis-admin-authenticated';
+    const STORAGE_KEY = 'digital-income-studio-config-v3';
+
+    /* ═══════════════════════════════════════════════════════════════
+       DEFAULT DATA
+       ═══════════════════════════════════════════════════════════════ */
+    const defaults = {
+      title: 'Digital Income Studio',
+      subtitle: 'Build simple digital assets that attract buyer-intent traffic and generate long-term income momentum.',
+      briefIntro: 'Welcome to Digital Income Studio. This page highlights high-impact affiliate tools and platforms inspired by practical traffic strategies, automation, and conversion-focused execution.',
+      colors: {
+        primary: '#ff6b35',
+        accent: '#2ec4b6',
+        bgTint: '#0f172a'
+      },
+      banner: {
+        text: 'Limited-time bonus bundle: get instant access and start today.',
+        ctaText: 'Claim Offer',
+        ctaLink: '#products'
+      },
+      graffitiWords: ['Traffic', 'Affiliate', 'Automation', 'SEO', 'Funnels', 'Conversions'],
+      metrics: [
+        { label: 'Free Visitors (Jan)', value: '102K' },
+        { label: 'Impressions (Jan)', value: '290K' },
+        { label: 'Free Visitors (Dec)', value: '75K' },
+        { label: 'Ad Spend', value: '$0' }
+      ],
+      products: [
+        { name: 'Traffic Magnets Core', tag: 'Traffic', desc: 'Core platform for building interactive tools and attracting free buyer-intent traffic.', image: 'https://images.unsplash.com/photo-1553531088-23dbbafee34d?w=640&h=360&fit=crop', link: 'https://example.com/product-1' },
+        { name: 'Custom GPT Builder', tag: 'AI', desc: 'Attach guided AI conversations to your tools to increase engagement and conversions.', image: 'https://images.unsplash.com/photo-1677442d019cecf8025356f7376a450d8c89b007?w=640&h=360&fit=crop', link: 'https://example.com/product-2' },
+        { name: 'Traffic Magnets Unlimited', tag: 'Scale', desc: 'Remove build limits and publish unlimited tools and pages for long-term scale.', image: 'https://images.unsplash.com/photo-1460925895917-adf4e565db18?w=640&h=360&fit=crop', link: 'https://example.com/product-3' },
+        { name: 'Traffic Magnets Agency', tag: 'Agency', desc: 'Create and manage client projects with scalable service-based recurring revenue.', image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=640&h=360&fit=crop', link: 'https://example.com/product-4' },
+        { name: 'Viral Content Pilot', tag: 'Leads', desc: 'Turn traffic into verified leads with frictionless capture workflows.', image: 'https://images.unsplash.com/photo-1516321318423-f06f70d504f0?w=640&h=360&fit=crop', link: 'https://example.com/product-5' },
+        { name: 'AI Traffic Vault', tag: 'Strategy', desc: 'Access practical traffic plays and execution checklists for faster deployment.', image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=640&h=360&fit=crop', link: 'https://example.com/product-6' }
+      ],
+      quotes: [
+        { text: 'I built no-code tools that would have cost thousands to outsource. Practical and fast to implement.', by: 'Jerry R.' },
+        { text: 'Every tool I bought solved a real marketing problem and delivered what was promised.', by: 'Benjamin N.' },
+        { text: 'The training gave me confidence to ship tools quickly and keep compounding traffic over time.', by: 'Flo M.' }
+      ]
+    };
+
+    /* ═══════════════════════════════════════════════════════════════
+       ADMIN FUNCTIONS
+       ═══════════════════════════════════════════════════════════════ */
+    function validateAdminPassword() {
+      const password = document.getElementById('adminPassword').value;
+      const statusDiv = document.getElementById('adminStatus');
+
+      if (!password) {
+        showAdminStatus('Enter a password', 'error');
+        return;
+      }
+
+      if (password === ADMIN_PASSWORD) {
+        localStorage.setItem(ADMIN_KEY, 'true');
+        showAdminStatus('✅ Access granted!', 'success');
+        setTimeout(unlockAdminPanel, 600);
+      } else {
+        showAdminStatus('❌ Wrong password', 'error');
+        document.getElementById('adminPassword').value = '';
+      }
+    }
+
+    function showAdminStatus(message, type) {
+      const statusDiv = document.getElementById('adminStatus');
+      statusDiv.textContent = message;
+      statusDiv.className = `admin-status ${type}`;
+    }
+
+    function unlockAdminPanel() {
+      document.getElementById('adminLock').style.display = 'none';
+      document.getElementById('controlPanel').classList.remove('hidden');
+      document.getElementById('adminBadge').classList.remove('hidden');
+      fillForm();
+    }
+
+    function skipAdmin() {
+      document.getElementById('adminLock').style.display = 'none';
+      document.getElementById('adminBadge').classList.add('hidden');
+    }
+
+    function logoutAdmin() {
+      localStorage.removeItem(ADMIN_KEY);
+      location.reload();
+    }
+
+    function checkAdminAccess() {
+      const isAdmin = localStorage.getItem(ADMIN_KEY) === 'true';
+      if (isAdmin) {
+        unlockAdminPanel();
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       STATE MANAGEMENT
+       ═══════════════════════════════════════════════════════════════ */
+    function loadState() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return structuredClone(defaults);
+      try {
+        const parsed = JSON.parse(raw);
+        return {
+          ...structuredClone(defaults),
+          ...parsed,
+          colors: { ...defaults.colors, ...(parsed.colors || {}) },
+          banner: { ...defaults.banner, ...(parsed.banner || {}) },
+          graffitiWords: parsed.graffitiWords || defaults.graffitiWords,
+          products: Array.isArray(parsed.products) && parsed.products.length ? parsed.products : defaults.products,
+          metrics: Array.isArray(parsed.metrics) && parsed.metrics.length ? parsed.metrics : defaults.metrics,
+          quotes: Array.isArray(parsed.quotes) && parsed.quotes.length ? parsed.quotes : defaults.quotes
+        };
+      } catch (error) {
+        console.warn('Failed to load state:', error);
+        return structuredClone(defaults);
+      }
+    }
+
+    function saveState(state) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (error) {
+        console.error('Failed to save state:', error);
+        alert('Failed to save changes. Storage may be full.');
+      }
+    }
+
+    let state = loadState();
+
+    /* ═══════════════════════════════════════════════════════════════
+       UTILITIES
+       ═══════════════════════════════════════════════════════════════ */
+    function normalizeLink(link) {
+      if (!link || link.toString().trim() === '') return '#products';
+      const trimmed = String(link).trim();
+      if (trimmed.startsWith('#')) return trimmed;
+      if (/^https?:\/\//i.test(trimmed)) return trimmed;
+      if (trimmed.match(/^[a-z0-9.-]+\.[a-z]{2,}/i)) return `https://${trimmed}`;
+      return `#${trimmed}`;
+    }
+
+    function parseJsonField(inputId, fallback, label) {
+      const raw = document.getElementById(inputId).value.trim();
+      if (!raw) return fallback;
+      try {
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) throw new Error(`${label} must be an array`);
+        if (parsed.length === 0) throw new Error(`${label} array cannot be empty`);
+        return parsed;
+      } catch (error) {
+        alert(`❌ JSON Error in ${label}:\n\n${error.message}`);
+        throw error;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RENDERING
+       ═══════════════════════════════════════════════════════════════ */
+    function renderMetrics() {
+      const wrap = document.getElementById('metrics');
+      if (!Array.isArray(state.metrics) || state.metrics.length === 0) {
+        wrap.innerHTML = '';
+        return;
+      }
+      wrap.innerHTML = state.metrics.map((m) => `<div class="metric"><strong>${m.value || 'N/A'}</strong><span>${m.label || 'Metric'}</span></div>`).join('');
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById('productGrid');
+      if (!Array.isArray(state.products) || state.products.length === 0) {
+        grid.innerHTML = '<p style="color: var(--muted);">No products to display</p>';
+        return;
+      }
+      grid.innerHTML = state.products.map((p) => {
+        const name = p.name || 'Product';
+        const tag = p.tag || 'Featured';
+        const desc = p.desc || '';
+        const image = p.image || '';
+        const link = normalizeLink(p.link);
+        return `<article class="product-card">${image ? `<img src="${image}" alt="${name}" loading="lazy" onerror="this.style.display='none'" />` : ''}<div class="product-content"><p class="product-chip">${tag}</p><h3>${name}</h3><p>${desc}</p><a class="btn btn-primary" href="${link}" target="_blank" rel="noopener noreferrer">View Product</a></div></article>`;
+      }).join('');
+    }
+
+    function renderQuotes() {
+      const grid = document.getElementById('quoteGrid');
+      if (!Array.isArray(state.quotes) || state.quotes.length === 0) {
+        grid.innerHTML = '';
+        return;
+      }
+      grid.innerHTML = state.quotes.map((q) => `<article class="quote"><p>"${q.text || ''}"</p><span>— ${q.by || 'Anonymous'}</span></article>`).join('');
+    }
+
+    function renderGraffiti() {
+      const wrap = document.getElementById('heroGraffiti');
+      const words = Array.isArray(state.graffitiWords) && state.graffitiWords.length ? state.graffitiWords : state.products.map((p) => p.tag || p.name.split(' ')[0]).slice(0, 8);
+      wrap.innerHTML = words.map((word, idx) => {
+        const tilt = idx % 2 === 0 ? '-2deg' : '2deg';
+        const delay = `${idx * 0.12}s`;
+        return `<span class="graffiti-tag" style="--tilt:${tilt};--delay:${delay};">${word}</span>`;
+      }).join('');
+    }
+
+    function renderTheme() {
+      const root = document.documentElement;
+      root.style.setProperty('--primary', state.colors.primary);
+      root.style.setProperty('--accent', state.colors.accent);
+      root.style.setProperty('--bg-tint', state.colors.bgTint);
+    }
+
+    function renderStaticText() {
+      document.getElementById('siteTitle').textContent = state.title;
+      document.getElementById('heroSubtitle').textContent = state.subtitle;
+      document.getElementById('briefIntro').textContent = state.briefIntro;
+      document.getElementById('offerBannerText').textContent = state.banner.text;
+      const cta = document.getElementById('offerBannerCta');
+      cta.textContent = state.banner.ctaText;
+      cta.href = normalizeLink(state.banner.ctaLink);
+      document.getElementById('year').textContent = new Date().getFullYear();
+    }
+
+    function fillForm() {
+      document.getElementById('inputTitle').value = state.title;
+      document.getElementById('inputSubtitle').value = state.subtitle;
+      document.getElementById('inputIntro').value = state.briefIntro;
+      document.getElementById('inputPrimary').value = state.colors.primary;
+      document.getElementById('inputAccent').value = state.colors.accent;
+      document.getElementById('inputBg').value = state.colors.bgTint;
+      document.getElementById('inputBannerText').value = state.banner.text;
+      document.getElementById('inputBannerCtaText').value = state.banner.ctaText;
+      document.getElementById('inputBannerCtaLink').value = state.banner.ctaLink;
+      document.getElementById('inputGraffiti').value = (Array.isArray(state.graffitiWords) ? state.graffitiWords : []).join(', ');
+      document.getElementById('inputProductsJson').value = JSON.stringify(state.products, null, 2);
+      document.getElementById('inputMetricsJson').value = JSON.stringify(state.metrics, null, 2);
+      document.getElementById('inputQuotesJson').value = JSON.stringify(state.quotes, null, 2);
+    }
+
+    function renderAll() {
+      renderTheme();
+      renderStaticText();
+      renderMetrics();
+      renderProducts();
+      renderQuotes();
+      renderGraffiti();
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       EVENT LISTENERS
+       ═══════════════════════════════════════════════════════════════ */
+    document.getElementById('settingsForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      state.title = document.getElementById('inputTitle').value.trim() || defaults.title;
+      state.subtitle = document.getElementById('inputSubtitle').value.trim() || defaults.subtitle;
+      state.briefIntro = document.getElementById('inputIntro').value.trim() || defaults.briefIntro;
+      state.colors.primary = document.getElementById('inputPrimary').value;
+      state.colors.accent = document.getElementById('inputAccent').value;
+      state.colors.bgTint = document.getElementById('inputBg').value;
+      state.banner.text = document.getElementById('inputBannerText').value.trim() || defaults.banner.text;
+      state.banner.ctaText = document.getElementById('inputBannerCtaText').value.trim() || defaults.banner.ctaText;
+      state.banner.ctaLink = document.getElementById('inputBannerCtaLink').value.trim() || defaults.banner.ctaLink;
+      state.graffitiWords = document.getElementById('inputGraffiti').value.split(',').map((item) => item.trim()).filter(Boolean);
+
+      try {
+        state.products = parseJsonField('inputProductsJson', defaults.products, 'Products JSON');
+        state.metrics = parseJsonField('inputMetricsJson', defaults.metrics, 'Metrics JSON');
+        state.quotes = parseJsonField('inputQuotesJson', defaults.quotes, 'Testimonials JSON');
+      } catch (error) {
+        return;
+      }
+
+      saveState(state);
+      renderAll();
+      alert('✅ Changes applied successfully!');
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if (confirm('Reset to defaults? This will delete all custom changes.')) {
+        state = structuredClone(defaults);
+        saveState(state);
+        renderAll();
+        fillForm();
+        alert('✅ Defaults restored!');
+      }
+    });
+
+    document.getElementById('offerBannerClose').addEventListener('click', () => {
+      document.getElementById('offerBanner').style.display = 'none';
+    });
+
+    // Allow password submission with Enter key
+    document.getElementById('adminPassword').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') validateAdminPassword();
+    });
+
+    /* ═══════════════════════════════════════════════════════════════
+       INITIALIZATION
+       ═══════════════════════════════════════════════════════════════ */
+    checkAdminAccess();
+    renderAll();
+  </script>
+</body>
+</html>
